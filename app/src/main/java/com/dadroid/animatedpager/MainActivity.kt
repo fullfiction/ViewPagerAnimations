@@ -1,9 +1,6 @@
 package com.dadroid.animatedpager
 
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
@@ -21,44 +18,56 @@ import io.reactivex.subjects.PublishSubject
 import kotlin.math.min
 
 
-class MainActivity : AppCompatActivity(), ViewPager.PageTransformer, ViewPager.OnPageChangeListener {
+class MainActivity() : AppCompatActivity(), ViewPager.PageTransformer, ViewPager.OnPageChangeListener {
 
     val publishSubject = PublishSubject.create<PublishSubjectMessage>()
 
     private var mViewPager : ViewPager? = null
+    private var mViewPagerAdapter: PagerAdapter? = null
     private var mHorizontalScrollView : HorizontalScrollView? = null
+
     private var bgWidth : Int = 100.dp
 
     override  fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        drawPager()
+        drawBackground()
+    }
 
-        val bgColors = listOf("#634890", "#F7C04A", "#F16767", "#62CDFF")
+    private fun drawPager() {
+        mViewPager = findViewById(R.id.pager)
+        mViewPagerAdapter = PagerAdapter(supportFragmentManager)
+        mViewPagerAdapter?.let { it ->
+            it.addPage(FragmentFirstPage.newInstance(0))
+            it.addPage(FragmentSecondPage.newInstance(1))
+            it.addPage(FragmentThirdPage.newInstance(2))
+            it.addPage(FragmentFourthPage.newInstance(3))
 
-        mHorizontalScrollView = findViewById(R.id.hsv)
-        mViewPager = findViewById<ViewPager>(R.id.pager)
-        mViewPager?.let {
-            it.adapter = PagerAdapter(supportFragmentManager, bgColors.size)
-            it.setPageTransformer(false, this)
-            it.addOnPageChangeListener(this)
+            mViewPager?.let {
+                it.adapter = mViewPagerAdapter
+                it.setPageTransformer(false, this)
+                it.addOnPageChangeListener(this)
+            }
         }
+    }
 
+    private fun drawBackground() {
+        mHorizontalScrollView = findViewById(R.id.hsv)
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val height = displayMetrics.heightPixels
         bgWidth += displayMetrics.widthPixels
-
         val container = findViewById<LinearLayoutCompat>(R.id.container)
-
-        bgColors.forEachIndexed { index, s ->
+        val bgColors = mViewPagerAdapter!!.getColors()
+        bgColors.forEachIndexed { index, color ->
 
             val bgImage = AppCompatImageView(this)
-            val lp = LinearLayoutCompat.LayoutParams(bgWidth!!, LayoutParams.MATCH_PARENT)
+            val lp = LinearLayoutCompat.LayoutParams(bgWidth, LayoutParams.MATCH_PARENT)
             bgImage.layoutParams = lp
             bgImage.scaleType = ImageView.ScaleType.FIT_XY
             bgImage.setImageDrawable(getDrawable(R.drawable.bg))
-            bgImage.setBackgroundColor(Color.parseColor(bgColors[min(index +1, bgColors.size -1)]))
-            bgImage.imageTintList = ColorStateList.valueOf(Color.parseColor(s))
+            bgImage.setBackgroundColor(bgColors[min(index + 1, bgColors.size - 1)])
+            bgImage.imageTintList = ColorStateList.valueOf(color)
 
             container.addView(bgImage)
         }
@@ -81,14 +90,22 @@ class MainActivity : AppCompatActivity(), ViewPager.PageTransformer, ViewPager.O
     }
 }
 
-class PagerAdapter(fm: FragmentManager, var pageCount : Int ) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class PagerAdapter constructor(fm: FragmentManager, private var pages : MutableList<IntroFragment> = mutableListOf())
+    : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+    fun addPage(page : IntroFragment){
+        pages.add(page)
+        notifyDataSetChanged()
+    }
+
+    fun getColors() = pages.map { it.color() }
 
     override fun getCount(): Int {
-        return pageCount
+        return pages.size
     }
 
     override fun getItem(position: Int): Fragment {
-        return FragmentPage.newInstance(position)
+        return pages[position]
     }
 }
 
