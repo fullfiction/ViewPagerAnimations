@@ -69,8 +69,9 @@ class MainActivity : AppCompatActivity(), ViewPager.PageTransformer, ViewPager.O
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        val x = positionOffsetPixels + (position * (bgWidth))
-        mHorizontalScrollView!!.scrollTo(x, 0)
+        val fullPage = position * bgWidth
+        val scrollDistance = fullPage + (positionOffsetPixels * bgWidth / mViewPager!!.width)
+        mHorizontalScrollView!!.scrollTo(scrollDistance, 0)
     }
 
     override fun onPageSelected(position: Int) {
