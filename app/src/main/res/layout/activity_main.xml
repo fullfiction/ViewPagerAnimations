@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
     <HorizontalScrollView
          android:id="@+id/hsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:scrollbars="none">
 
         <androidx.appcompat.widget.LinearLayoutCompat android:id="@+id/container"
@@ -22,7 +24,8 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
-        android:overScrollMode="never"
+        android:fitsSystemWindows="true"
+        android:overScrollMode="always"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

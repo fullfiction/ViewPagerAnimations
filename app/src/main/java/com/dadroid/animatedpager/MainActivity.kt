@@ -1,5 +1,6 @@
 package com.dadroid.animatedpager
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
@@ -8,7 +9,9 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -22,8 +25,9 @@ class MainActivity : AppCompatActivity(), ViewPager.PageTransformer, ViewPager.O
 
     val publishSubject = PublishSubject.create<PublishSubjectMessage>()
 
-    var mViewPager : ViewPager? = null
-    var mHorizontalScrollView : HorizontalScrollView? = null
+    private var mViewPager : ViewPager? = null
+    private var mHorizontalScrollView : HorizontalScrollView? = null
+    private var bgWidth : Int = 100.dp
 
     override  fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,29 +46,21 @@ class MainActivity : AppCompatActivity(), ViewPager.PageTransformer, ViewPager.O
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val height = displayMetrics.heightPixels
-        val width = displayMetrics.widthPixels
+        bgWidth += displayMetrics.widthPixels
 
         val container = findViewById<LinearLayoutCompat>(R.id.container)
 
         bgColors.forEachIndexed { index, s ->
-            val page = View(this)
-            page.layoutParams = LinearLayoutCompat.LayoutParams(width, height)
-            page.setBackgroundColor(Color.parseColor(s))
-            container.addView(page)
 
-            val arc = View(this)
-            val arcBg = getDrawable(R.drawable.arc_bg) as LayerDrawable
-            val arcBgFrontLayer =
-                arcBg.findDrawableByLayerId(R.id.frontLayer) as GradientDrawable
-            arcBgFrontLayer.setColor(Color.parseColor(s))
-            val arcBgBackLayer =
-                arcBg.findDrawableByLayerId(R.id.backLayer) as GradientDrawable
-            arcBgBackLayer.setColor(Color.parseColor(bgColors[min(index +1, bgColors.size -1)]))
-            arc.background = arcBg
+            val bgImage = AppCompatImageView(this)
+            val lp = LinearLayoutCompat.LayoutParams(bgWidth!!, LayoutParams.MATCH_PARENT)
+            bgImage.layoutParams = lp
+            bgImage.scaleType = ImageView.ScaleType.FIT_XY
+            bgImage.setImageDrawable(getDrawable(R.drawable.bg))
+            bgImage.setBackgroundColor(Color.parseColor(bgColors[min(index +1, bgColors.size -1)]))
+            bgImage.imageTintList = ColorStateList.valueOf(Color.parseColor(s))
 
-            val layoutParams = LinearLayoutCompat.LayoutParams(100.dp, LayoutParams.MATCH_PARENT)
-            arc.layoutParams = layoutParams
-            container.addView(arc)
+            container.addView(bgImage)
         }
     }
 
@@ -73,7 +69,7 @@ class MainActivity : AppCompatActivity(), ViewPager.PageTransformer, ViewPager.O
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        val x = positionOffsetPixels + (position * (mViewPager!!.width + 100.dp))
+        val x = positionOffsetPixels + (position * (bgWidth))
         mHorizontalScrollView!!.scrollTo(x, 0)
     }
 

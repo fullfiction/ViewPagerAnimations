@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,6 +30,7 @@ class FragmentPage : Fragment() {
     
     var mIcon : AppCompatImageView? = null
     var mIcon2 : AppCompatImageView? = null
+    var test : TextView? = null
 
     private var disposable : Disposable? = null
 
@@ -54,6 +56,7 @@ class FragmentPage : Fragment() {
 
         mIcon = view.findViewById(R.id.icon)
         mIcon2 = view.findViewById(R.id.icon2)
+        test = view.findViewById(R.id.test)
     }
 
     override fun onAttach(context: Context) {
@@ -84,5 +87,6 @@ class FragmentPage : Fragment() {
         mIcon!!.translationX = scrollFactor
         mIcon!!.translationY = scrollFactor * 0.5f
         mIcon2!!.translationY = scrollFactor
+        test?.text = it.position.toString()
     }
 }
