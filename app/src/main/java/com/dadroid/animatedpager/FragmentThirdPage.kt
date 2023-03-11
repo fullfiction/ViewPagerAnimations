@@ -23,7 +23,7 @@ class FragmentThirdPage : IntroFragment() {
     var mIcon2 : AppCompatImageView? = null
     var test : TextView? = null
 
-    override fun color() = Color.parseColor("#F16767")
+    override fun color() = R.color.third_page
 
     override fun layoutId()= R.layout.fragment_third_page
 

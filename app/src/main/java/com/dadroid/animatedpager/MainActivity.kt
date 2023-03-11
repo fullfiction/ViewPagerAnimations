@@ -66,15 +66,15 @@ class MainActivity() : AppCompatActivity(), ViewPager.PageTransformer, ViewPager
             bgImage.layoutParams = lp
             bgImage.scaleType = ImageView.ScaleType.FIT_XY
             bgImage.setImageDrawable(getDrawable(R.drawable.bg))
-            bgImage.setBackgroundColor(bgColors[min(index + 1, bgColors.size - 1)])
-            bgImage.imageTintList = ColorStateList.valueOf(color)
+            bgImage.setBackgroundColor(resources.getColor(bgColors[min(index + 1, bgColors.size - 1)]))
+            bgImage.imageTintList = ColorStateList.valueOf(resources.getColor(color))
 
             container.addView(bgImage)
         }
     }
 
     override fun transformPage(page: View, position: Float) {
-        (page.context as MainActivity).publishSubject.onNext(PublishSubjectMessage(page.tag as Int, position))
+        publishSubject.onNext(PublishSubjectMessage(page.tag as Int, position, false))
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -84,6 +84,7 @@ class MainActivity() : AppCompatActivity(), ViewPager.PageTransformer, ViewPager
     }
 
     override fun onPageSelected(position: Int) {
+        publishSubject.onNext(PublishSubjectMessage(position, position.toFloat(), false))
     }
 
     override fun onPageScrollStateChanged(state: Int) {
@@ -111,5 +112,6 @@ class PagerAdapter constructor(fm: FragmentManager, private var pages : MutableL
 
 data class PublishSubjectMessage(
     val pageNumber : Int,
-    val position: Float
+    val position: Float,
+    val scrollEnd: Boolean
 )

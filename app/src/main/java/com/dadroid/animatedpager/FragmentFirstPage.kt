@@ -23,7 +23,7 @@ class FragmentFirstPage : IntroFragment() {
     var mIcon2 : AppCompatImageView? = null
     var test : TextView? = null
 
-    override fun color() = Color.parseColor("#634890")
+    override fun color() = R.color.first_page
     override fun layoutId() = R.layout.fragment_first_page
 
     @SuppressLint("CheckResult")

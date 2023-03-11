@@ -17,27 +17,53 @@
         android:layout_height="100dp" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_launcher_foreground"
+        app:srcCompat="@drawable/ic_boy"
+        android:layout_marginStart="-100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="-150dp"
-        app:tint="#FF0000"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/icon2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/first"
+        android:layout_height="50dp"
+        android:layout_width="200dp"
+        app:cardElevation="5dp"
+        android:layout_marginStart="-15dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="-150dp"
-        app:tint="#FF0000"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/second"
+        android:layout_height="50dp"
+        android:layout_width="200dp"
+        android:layout_marginTop="-10dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/first"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/third"
+        android:layout_height="50dp"
+        android:layout_width="200dp"
+        android:elevation="15dp"
+        android:layout_marginStart="-10dp"
+        android:translationZ="2dp"
+        app:layout_constraintTop_toBottomOf="@+id/second"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/fourth"
+        android:layout_height="50dp"
+        android:layout_width="200dp"
+        android:layout_marginTop="-10dp"
+        app:layout_constraintTop_toBottomOf="@+id/third"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
